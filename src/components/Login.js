@@ -1,128 +1,127 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function Login() {
-  const navigate = useNavigate();
+const LoginPage = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    aadhar: "",
+    phone: "",
+    district: "",
+    state: "",
+  });
 
-  const [aadhaar, setAadhaar] = useState("");
-  const [error, setError] = useState("");
-  const [state, setState] = useState("");
-  const [district, setDistrict] = useState("");
+  const [errors, setErrors] = useState({});
 
-  const districtsByState = {
-    TamilNadu: ["Chennai", "Coimbatore", "Madurai", "Salem", "Erode"],
-    Kerala: ["Thiruvananthapuram", "Kochi", "Kozhikode"],
-    Karnataka: ["Bengaluru", "Mysuru", "Mangaluru"],
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = (e) => {
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!/^\d{12}$/.test(formData.aadhar))
+      newErrors.aadhar = "Aadhar must be 12 digits";
+    if (!/^\d{10}$/.test(formData.phone))
+      newErrors.phone = "Phone number must be 10 digits";
+    if (!formData.district) newErrors.district = "District is required";
+    if (!formData.state) newErrors.state = "State is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!/^\d{12}$/.test(aadhaar)) {
-      setError("❌ Aadhaar number must be 12 digits");
-      return;
+    if (validate()) {
+      alert("Form submitted successfully!");
+      // You can add your submit logic here
     }
-
-    setError("");
-
-    localStorage.removeItem("voterIdImage");
-    localStorage.removeItem("faceImage");
-    localStorage.removeItem("verified");
-
-    navigate("/upload");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center
-      bg-gradient-to-br from-pink-100 to-pink-200 animate-fadeIn">
-
+    <div className="min-h-screen flex items-center justify-center bg-pink-100">
       <form
-        onSubmit={handleLogin}
-        className="bg-white/90 backdrop-blur p-8 rounded-2xl
-        shadow-xl w-96 border border-pink-200
-        transform transition-all duration-500
-        hover:-translate-y-2 hover:shadow-2xl"
+        onSubmit={handleSubmit}
+        className="bg-pink-200 p-8 rounded-xl shadow-lg w-full max-w-md transform transition duration-500 hover:scale-105"
       >
-        <h2 className="text-2xl font-bold mb-4 text-center text-pink-600 animate-pulse">
-          Welcome Back
+        <h2 className="text-2xl font-bold mb-6 text-center text-pink-800 animate-bounce">
+          Login
         </h2>
 
-        {error && (
-          <div className="mb-4 text-sm text-pink-700 bg-pink-100 border border-pink-300 
-            rounded-lg px-3 py-2 animate-pulse">
-            {error}
-          </div>
-        )}
+        {/* Name */}
+        <div className="mb-4">
+          <label className="block mb-1 text-pink-700 font-semibold">Name</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full p-2 rounded border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
+          />
+          {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
+        </div>
 
-        <input
-          className="w-full mb-3 px-4 py-2 rounded-lg border border-pink-300
-            focus:outline-none focus:ring-2 focus:ring-pink-400 focus:shadow-pink-200/50
-            transition duration-300 focus:scale-[1.02]"
-          placeholder="Name"
-          required
-        />
+        {/* Aadhar */}
+        <div className="mb-4">
+          <label className="block mb-1 text-pink-700 font-semibold">Aadhar Number</label>
+          <input
+            type="text"
+            name="aadhar"
+            value={formData.aadhar}
+            onChange={handleChange}
+            maxLength="12"
+            className="w-full p-2 rounded border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
+          />
+          {errors.aadhar && <p className="text-red-600 text-sm">{errors.aadhar}</p>}
+        </div>
 
-        <input
-          value={aadhaar}
-          onChange={(e) => setAadhaar(e.target.value)}
-          maxLength={12}
-          className="w-full mb-3 px-4 py-2 rounded-lg border border-pink-300
-            focus:outline-none focus:ring-2 focus:ring-pink-400 focus:shadow-pink-200/50
-            transition duration-300 focus:scale-[1.02]"
-          placeholder="Aadhaar Number"
-          required
-        />
+        {/* Phone */}
+        <div className="mb-4">
+          <label className="block mb-1 text-pink-700 font-semibold">Phone Number</label>
+          <input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            maxLength="10"
+            className="w-full p-2 rounded border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
+          />
+          {errors.phone && <p className="text-red-600 text-sm">{errors.phone}</p>}
+        </div>
 
-        <select
-          value={state}
-          onChange={(e) => {
-            setState(e.target.value);
-            setDistrict("");
-          }}
-          className="w-full mb-3 px-4 py-2 rounded-lg border border-pink-300
-            focus:ring-2 focus:ring-pink-400 focus:shadow-pink-200/50 bg-white transition"
-          required
-        >
-          <option value="">Select State</option>
-          <option value="TamilNadu">Tamil Nadu</option>
-          <option value="Kerala">Kerala</option>
-          <option value="Karnataka">Karnataka</option>
-        </select>
+        {/* District */}
+        <div className="mb-4">
+          <label className="block mb-1 text-pink-700 font-semibold">District</label>
+          <input
+            type="text"
+            name="district"
+            value={formData.district}
+            onChange={handleChange}
+            className="w-full p-2 rounded border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
+          />
+          {errors.district && <p className="text-red-600 text-sm">{errors.district}</p>}
+        </div>
 
-        <select
-          value={district}
-          onChange={(e) => setDistrict(e.target.value)}
-          className="w-full mb-3 px-4 py-2 rounded-lg border border-pink-300
-            focus:ring-2 focus:ring-pink-400 focus:shadow-pink-200/50 bg-white transition"
-          required
-          disabled={!state}
-        >
-          <option value="">Select District</option>
-          {state &&
-            districtsByState[state].map((dist) => (
-              <option key={dist} value={dist}>
-                {dist}
-              </option>
-            ))}
-        </select>
-
-        <input
-          className="w-full mb-5 px-4 py-2 rounded-lg border border-pink-300
-            focus:outline-none focus:ring-2 focus:ring-pink-400 focus:shadow-pink-200/50
-            transition duration-300 focus:scale-[1.02]"
-          placeholder="Taluk"
-          required
-        />
+        {/* State */}
+        <div className="mb-6">
+          <label className="block mb-1 text-pink-700 font-semibold">State</label>
+          <input
+            type="text"
+            name="state"
+            value={formData.state}
+            onChange={handleChange}
+            className="w-full p-2 rounded border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
+          />
+          {errors.state && <p className="text-red-600 text-sm">{errors.state}</p>}
+        </div>
 
         <button
-          className="w-full bg-gradient-to-r from-pink-400 to-pink-500
-            text-white py-2 rounded-lg font-semibold
-            shadow-md hover:scale-105 active:scale-95 transition-all
-            hover:shadow-pink-300/70"
+          type="submit"
+          className="w-full bg-pink-500 text-white py-2 rounded hover:bg-pink-600 transition duration-300"
         >
-          Login 
+          Submit
         </button>
       </form>
     </div>
   );
-}
+};
+
+export default LoginPage;
