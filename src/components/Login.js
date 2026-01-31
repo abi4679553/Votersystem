@@ -5,6 +5,12 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
+
+    // 🔥 CLEAR OLD DATA
+    localStorage.removeItem("voterIdImage");
+    localStorage.removeItem("faceImage");
+    localStorage.removeItem("verified");
+
     navigate("/upload");
   };
 

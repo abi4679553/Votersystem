@@ -5,7 +5,6 @@ export default function UploadVoterID() {
 
   const handleFile = (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
     const reader = new FileReader();
@@ -17,7 +16,7 @@ export default function UploadVoterID() {
 
   const handleNext = () => {
     if (!localStorage.getItem("voterIdImage")) {
-      alert("Please upload Voter ID photo");
+      alert("❌ Please upload Voter ID photo");
       return;
     }
     navigate("/facescan");
@@ -28,14 +27,9 @@ export default function UploadVoterID() {
       <div className="p-6 shadow rounded w-96">
         <h2 className="font-bold mb-4">Upload Voter ID</h2>
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFile}
-          className="mb-4"
-        />
+        <input type="file" accept="image/*" onChange={handleFile} />
 
-        <button onClick={handleNext} className="btn">
+        <button onClick={handleNext} className="btn mt-4">
           Next
         </button>
       </div>
