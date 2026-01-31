@@ -6,13 +6,11 @@ export default function Voting() {
   const [vote, setVote] = useState("");
 
   useEffect(() => {
-    // 🔒 Page protection
     if (localStorage.getItem("verified") !== "true") {
       alert("Unauthorized access");
       navigate("/");
     }
 
-    // 🛑 One-time voting check
     if (localStorage.getItem("voted") === "true") {
       alert("You have already voted");
       navigate("/");
@@ -25,13 +23,11 @@ export default function Voting() {
       return;
     }
 
-    // ✅ Save vote (demo)
     localStorage.setItem("voted", "true");
     localStorage.setItem("selectedParty", vote);
 
     alert("✅ Vote submitted successfully");
 
-    // Cleanup (optional)
     localStorage.removeItem("verified");
     localStorage.removeItem("faceImage");
     localStorage.removeItem("voterIdImage");
@@ -40,32 +36,51 @@ export default function Voting() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="p-6 shadow rounded w-96">
-        <h2 className="font-bold mb-4 text-center">Voting Page</h2>
+    <div className="min-h-screen flex items-center justify-center
+      bg-gradient-to-br from-pink-100 to-pink-200 animate-fadeIn">
 
-        <label className="block mb-2">
-          <input
-            type="radio"
-            name="vote"
-            value="Party A"
-            onChange={(e) => setVote(e.target.value)}
-          />{" "}
-          Party A
-        </label>
+      <div className="bg-white/90 backdrop-blur p-8 rounded-2xl 
+        shadow-xl w-96 border border-pink-200 transform transition-all
+        hover:-translate-y-2 hover:shadow-2xl text-center">
 
-        <label className="block mb-2">
-          <input
-            type="radio"
-            name="vote"
-            value="Party B"
-            onChange={(e) => setVote(e.target.value)}
-          />{" "}
-          Party B
-        </label>
+        <h2 className="text-2xl font-bold mb-6 text-pink-600 animate-pulse">
+          🗳️ Voting Page
+        </h2>
 
-        <button onClick={handleSubmit} className="btn mt-4">
-          Submit Vote
+        <div className="flex flex-col items-start mb-4">
+          <label className="flex items-center mb-3 cursor-pointer
+            transition hover:text-pink-600">
+            <input
+              type="radio"
+              name="vote"
+              value="Party A"
+              onChange={(e) => setVote(e.target.value)}
+              className="mr-2 accent-pink-400"
+            />
+            Party A
+          </label>
+
+          <label className="flex items-center mb-3 cursor-pointer
+            transition hover:text-pink-600">
+            <input
+              type="radio"
+              name="vote"
+              value="Party B"
+              onChange={(e) => setVote(e.target.value)}
+              className="mr-2 accent-pink-400"
+            />
+            Party B
+          </label>
+        </div>
+
+        <button
+          onClick={handleSubmit}
+          className="w-full bg-gradient-to-r from-pink-400 to-pink-500
+            text-white py-2 rounded-lg font-semibold shadow-md
+            hover:scale-105 active:scale-95 transition-all
+            hover:shadow-pink-300/70"
+        >
+          Submit Vote 
         </button>
       </div>
     </div>

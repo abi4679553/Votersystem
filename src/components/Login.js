@@ -44,7 +44,7 @@ export default function Login() {
         hover:-translate-y-2 hover:shadow-2xl"
       >
         <h2 className="text-2xl font-bold mb-4 text-center text-pink-600 animate-pulse">
-          🌸 Welcome Back
+          Welcome Back
         </h2>
 
         {error && (
